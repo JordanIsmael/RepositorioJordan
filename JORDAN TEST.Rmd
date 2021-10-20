@@ -1,0 +1,70 @@
+---
+title: "Análisis_Datos_Jordan"
+author: "Jordan_Ismael"
+date: "19/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+install.packages("readxl")
+install.packages("dplyr")
+install.packages("ggplot2")
+library(readxl)
+library(dplyr)
+library(ggplot2)
+
+```
+
+```{r}
+Sargo <- read_excel("DatosDesove.xlsx", sheet = 1)
+
+
+```
+
+```{r}
+
+# HISTOGRAMAS
+
+hist(Sargo$No_of_eggs, main = "Número de huevos por desove de de sargo", xlab = "Cantidad de huevos (n)", ylab = "Frecuencia")
+hist(Sargo$Water_Temp, main = "Temperatura del agua de reproductores de sargo", xlab = "Temperatura (°C)", ylab = "Frecuencia")
+hist(Sargo$Day_length, main = "Fotoperiodo natural", xlab = "Horas de luz", ylab = "Frecuencia")
+
+```
+
+```{r}
+
+str(Sargo$No_of_eggs)
+table(Sargo$No_of_eggs)
+
+str(Sargo$Water_Temp)
+table(Sargo$Water_Temp)
+
+str(Sargo$Day_length)
+table(Sargo$Day_length)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+ggplot(Sargo, aes(x = No_of_eggs)) +
+  geom_histogram()
+
+ggplot(Sargo, aes(x = No_of_eggs)) +
+  geom_histogram(aes(color = month))
+
+```
+
+
