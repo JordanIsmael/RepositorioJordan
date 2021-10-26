@@ -17,7 +17,7 @@ library(ggplot2)
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 Sargo <- read_excel("DatosDesove.xlsx", sheet = 1)
 
 
@@ -33,17 +33,22 @@ hist(Sargo$Day_length, main = "Fotoperiodo natural", xlab = "Horas de luz", ylab
 
 ```
 
-```{r}
-
+```{r, echo=FALSE}
 str(Sargo$No_of_eggs)
-table(Sargo$No_of_eggs)
+table(Sargo$month, Sargo$Year)
 
+```
+
+```{r}
 str(Sargo$Water_Temp)
 table(Sargo$Water_Temp)
 
 str(Sargo$Day_length)
 table(Sargo$Day_length)
+```
 
+
+```{r}
 
 ```
 
@@ -59,8 +64,27 @@ table(Sargo$Day_length)
 
 ```{r}
 
-ggplot(Sargo, aes(x = No_of_eggs)) +
-  geom_histogram()
+boxplot(Sargo$No_of_eggs, main = "Boxplot de Número de huevos", xlab = "Número de huevos", ylab = "Frecuencia")
+
+boxplot(Sargo$Water_Temp, main = "Boxplot de Temperatura del agua", xlab = "Temperatura (°C)", ylab = "Frecuencia")
+
+boxplot(Sargo$Day_length, main = "Fotoperiodo natural", xlab = "Horas de luz (h)", ylab = "Frecuencia")
+
+
+ggplot(datos, aes(x=genotipo, y=weight,)) +
+    geom_boxplot()
+
+ggplot(Sargo, aes(y = No_of_eggs))+
+  geom_boxplot()
+
+ggplot(Sargo, aes(y = Water_Temp))+
+  geom_boxplot()
+
+ggplot(Sargo, aes(y = Day_length,))+
+  geom_boxplot()
+
+
+
 
 ggplot(Sargo, aes(x = No_of_eggs)) +
   geom_histogram(aes(color = month))
