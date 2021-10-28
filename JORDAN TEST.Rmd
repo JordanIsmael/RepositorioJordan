@@ -8,9 +8,9 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-install.packages("readxl")
-install.packages("dplyr")
-install.packages("ggplot2")
+#install.packages("readxl")
+#install.packages("dplyr")
+#install.packages("ggplot2")
 library(readxl)
 library(dplyr)
 library(ggplot2)
@@ -18,7 +18,7 @@ library(ggplot2)
 ```
 
 ```{r, echo=FALSE}
-Sargo <- read_excel("DatosDesove.xlsx", sheet = 1)
+Sargo <- read_excel("Desove.xlsx", sheet = 1)
 
 
 ```
