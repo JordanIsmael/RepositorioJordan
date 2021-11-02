@@ -1,8 +1,5 @@
-# RepositorioJordan
-Bienvenidos 
-
-# Título
-Desove natural de sargo *Anisotremus scapularis*
+# ¡HOLA!
+Bienvenidos a mi repositorio, espero sea de tu agrado.
 
 # Autor
 Jordan Ismael Huanacuni Pilco
