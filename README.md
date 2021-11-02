@@ -11,7 +11,9 @@ Universidad Nacional Jorge Basadre Grohmann, Tacna, Perú.
 Jhuanacunip@unjbg.edu.pe; Jordan.92ihp@gmail.com
 
 # Título
-Desove de sargo *Anisotremus scapularis*
+### Desove de sargo *Anisotremus scapularis*
+
+
 
 # Resumen del problema
 La investigación se realizó desde marzo de 2016 hasta agosto de 2021, en el Centro de Acuicultura Morro Sama (CAMOSA) del Fondo Nacional de Desarrollo Pesquero (FONDEPES). Se acondicionó un tanque circular tipo australiano con un plantel de 11 reproductores de *A. scapularis*. Se realizó la medición diaria de temperatura del agua, fotoperiodo natural. Cuando hubo desoves, se determinó la cantidad y su viabilidad. Nuestra experiencia propone relacionar las condiciones naturales de cultivo con la producción de huevos.
