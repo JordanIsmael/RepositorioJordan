@@ -26,7 +26,7 @@ library(knitr)
 ```{r, warning=FALSE, message=FALSE}
 Sargo <- read_excel("Desove.xlsx", sheet = 1)
 
-# summary(na.omit(Sargo))
+#summary(na.omit(Sargo))
 
 tablainicio <- head(na.omit(Sargo))
 tablainicio %>% knitr::kable(caption = "Datos iniciales de la tabla de datos")
