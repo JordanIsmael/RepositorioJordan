@@ -4,8 +4,11 @@ Bienvenidos a mi repositorio, espero sea de tu agrado.
 # Autor
 Jordan Ismael Huanacuni Pilco
 
+# Filiación
+Universidad Nacional Jorge Basadre Grohmann, Tacna, Perú.
+
 # Contacto
-Jhuanacunip@unjbg.edu.pe
+Jhuanacunip@unjbg.edu.pe; Jordan.92ihp@gmail.com
 
 # Título
 Desove de sargo *Anisotremus scapularis*
