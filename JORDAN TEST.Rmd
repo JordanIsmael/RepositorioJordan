@@ -85,39 +85,12 @@ str(Sargo)
 Tabla <- table(na.omit(Sargo$Temporada))
 Tabla %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
 ```
-
-## Modificando variables
-
-```{r}
-Sargo$Year <- as.character(Sargo$Year)
-Sargo$month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo","Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
-str(na.omit(Sargo))
-```
+### Los datos clasificados según temporada, no están balanceados.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Gráficos exploratorios de datos
+# Gráficos de Relación entre variables
 
 ## Desoves por temporada
-
-### Histograma
-
-
-
 
 ### Boxplot
 ```{r}
@@ -148,15 +121,6 @@ ggplot(data = na.omit(Sargo), aes(x=No_of_eggs, color=Temporada))+
 
 ## Temperatura por desove
 
-### Histograma
-```{r, warning=FALSE, message=FALSE}
-ggplot(data = na.omit(Sargo), aes(x = Water_Temp, fill=Temporada)) +
-  geom_histogram()+
-  labs(title="Temperatura del agua en temporada",
-     y = "Frecuencia",
-     x = "Temperatura del agua (°C)")
-```
-
 ### Boxplot
 ```{r}
 ggplot(data = na.omit(Sargo), aes(x = Temporada, y = Water_Temp, fill = Temporada))+
@@ -165,8 +129,8 @@ ggplot(data = na.omit(Sargo), aes(x = Temporada, y = Water_Temp, fill = Temporad
      x = "Tratamiento",
      y = "Temperatura del agua (°C)")
 ```
-## Temperatura del agua vs huevos
 
+## Temperatura del agua vs huevos
 ```{r}
 ggplot(data = na.omit(Sargo), aes(x=Water_Temp, y=No_of_eggs))+
   geom_point(aes_string(colour="Temporada"))+
@@ -176,7 +140,6 @@ ggplot(data = na.omit(Sargo), aes(x=Water_Temp, y=No_of_eggs))+
 ```
 
 ### Densidad acumulada
-
 ```{r}
 ggplot(data = na.omit(Sargo), aes(x=Day_length, y=No_of_eggs))+
   geom_point(aes_string(colour="Temporada"))+
@@ -184,4 +147,58 @@ ggplot(data = na.omit(Sargo), aes(x=Day_length, y=No_of_eggs))+
        x = "Número de huevos (1'000'000)",
        y = "Horas de luz")
 ```
+
+# Identificación de datos atípicos
+
+## Número de huevos
+```{r}
+ggplot(data = na.omit(Sargo), aes(x= Temporada, y = No_of_eggs, fill=Temporada))+
+  geom_boxplot(outlier.colour = "red")+
+  labs(title="Número de huevos en temporadas",
+     y = "Número de huevos (1´000´000)",
+     x = "Temporada")
+```
+### El número de huevos presenta datos atípicos en la temporada 1, 2, 3 y 4
+
+## Temperatura
+```{r}
+ggplot(data = na.omit(Sargo), aes(x= Temporada, y = Water_Temp, fill=Temporada))+
+  geom_boxplot(outlier.colour = "red")+
+  labs(title="Temperatura del agua en temporadas",
+     y = "Temperatura (°C)",
+     x = "Temporada")
+```
+### La temperatura del agua presenta datos atípicos en la temporada 1, 3 y 4.
+
+## Fotoperiodo natural
+```{r}
+ggplot(data = na.omit(Sargo), aes(x= Temporada, y = Day_length, fill=Temporada))+
+  geom_boxplot(outlier.colour = "red")+
+  labs(title="Fotoperiodo natural en temporadas",
+     y = "Horas de luz (h)",
+     x = "Temporada")
+```
+### El fotoperiodo natural presenta datos atípicos en la temporada 5.
+
+
+# Resumen de datos y estadística descriptiva usando Tablas
+
+```{r}
+# Estadística estadistica descriptiva del número de huevos en la temporada 1.
+tablaHuevos<- Sargo%>%
+  filter(Temporada=="1")%>%
+  summarize(mean(No_of_eggs),sd(No_of_eggs),max(No_of_eggs),min(No_of_eggs))
+knitr::kable(tablaHuevos,caption = "Estadisticos Descriptivos - Cantidad de huevos (x 1'000'000")
+
+```
+
+
+
+# Tansformación de variables
+```{r}
+#Sargo$Year <- as.character(Sargo$Year)
+#Sargo$month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo","Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
+#str(na.omit(Sargo))
+```
+
 
