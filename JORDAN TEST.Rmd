@@ -1,94 +1,142 @@
 ---
 title: "Análisis_Datos_Jordan"
 author: "Jordan_Ismael"
-date: "19/10/2021"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 #install.packages("readxl")
 #install.packages("dplyr")
 #install.packages("ggplot2")
+#install.packages("knitr")
+
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(knitr)
+
 
 ```
 
-```{r, echo=FALSE}
+# Análisis exploratorio de datos "Sargo"
+
+```{r, warning=FALSE, message=FALSE}
 Sargo <- read_excel("Desove.xlsx", sheet = 1)
 
+# summary(na.omit(Sargo))
 
+tablainicio <- head(na.omit(Sargo))
+tablainicio %>% knitr::kable(caption = "Datos iniciales de la tabla de datos")
+
+tablafinal <- tail(na.omit(Sargo))
+tablafinal %>% knitr::kable(caption = "Datos finales de la tabla de datos")
+
+# str(Sargo)
+
+Tabla <- table(na.omit(Sargo$Temprada))
+Tabla %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
 ```
+
+## Modificando variables
 
 ```{r}
-
-# HISTOGRAMAS
-
-hist(Sargo$No_of_eggs, main = "Número de huevos por desove de de sargo", xlab = "Cantidad de huevos (n)", ylab = "Frecuencia")
-hist(Sargo$Water_Temp, main = "Temperatura del agua de reproductores de sargo", xlab = "Temperatura (°C)", ylab = "Frecuencia")
-hist(Sargo$Day_length, main = "Fotoperiodo natural", xlab = "Horas de luz", ylab = "Frecuencia")
-
+Sargo$Year <- as.character(Sargo$Year)
+Sargo$month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo","Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
+str(na.omit(Sargo))
 ```
 
-```{r, echo=FALSE}
-str(Sargo$No_of_eggs)
-table(Sargo$month, Sargo$Year)
+# Gráficos exploratorios
 
-```
+## Desoves por temporada
 
-```{r}
-str(Sargo$Water_Temp)
-table(Sargo$Water_Temp)
+### Histograma
 
-str(Sargo$Day_length)
-table(Sargo$Day_length)
-```
-
-
-```{r}
-
-```
-
-
-
-
-
-
-
-
-
-
-
-```{r}
-
-boxplot(Sargo$No_of_eggs, main = "Boxplot de Número de huevos", xlab = "Número de huevos", ylab = "Frecuencia")
-
-boxplot(Sargo$Water_Temp, main = "Boxplot de Temperatura del agua", xlab = "Temperatura (°C)", ylab = "Frecuencia")
-
-boxplot(Sargo$Day_length, main = "Fotoperiodo natural", xlab = "Horas de luz (h)", ylab = "Frecuencia")
-
-
-ggplot(datos, aes(x=genotipo, y=weight,)) +
-    geom_boxplot()
-
-ggplot(Sargo, aes(y = No_of_eggs))+
-  geom_boxplot()
-
-ggplot(Sargo, aes(y = Water_Temp))+
-  geom_boxplot()
-
-ggplot(Sargo, aes(y = Day_length,))+
-  geom_boxplot()
-
-
-
-
+```{r, warning=FALSE, message=FALSE}
 ggplot(Sargo, aes(x = No_of_eggs)) +
-  geom_histogram(aes(color = month))
-
+  geom_histogram(aes(fill=..count..), bins = 12)+
+  theme_linedraw() +
+  scale_fill_gradient("Count", low = "red", high = "green")+
+  labs(title="Frecuencia de Número de huevos",
+     y = "Frecuencia",
+     x = "Número de huevos\n(x 1'000'000)")
 ```
+
+### Boxplot
+```{r}
+ggplot(data = na.omit(Sargo), aes(x= Temprada, y = No_of_eggs, fill=Temprada))+
+  geom_boxplot()+
+  theme_linedraw() +
+  labs(title="Número de huevos en temporadas",
+     y = "Número de huevos (1´000´000)",
+     x = "Temporada")
+```
+
+### Densidad
+```{r}
+ggplot(data = na.omit(Sargo), aes(x=No_of_eggs))+
+  geom_density(aes_string(colour="Temprada"))+
+  theme_linedraw() +
+  labs(title="Densidad",
+     y = "Densidad",
+     x = "Número de huevos\n(x 1'000'000)")
+```
+
+### Densidad acumulada
+```{r}
+ggplot(data = na.omit(Sargo), aes(x=No_of_eggs, color=Temprada))+
+  stat_ecdf(geom = "step")+
+  theme_linedraw() +
+  labs(title="Distribución empírica acumulada",
+     y = "Porcentaje (%)",
+     x = "Número de huevos\n(x 1'000'000)")
+```
+
+## Temperatura por desove
+
+### Histograma
+```{r, warning=FALSE, message=FALSE}
+ggplot(data = na.omit(Sargo), aes(x = Water_Temp, fill=Temprada)) +
+  geom_histogram()+
+  theme_linedraw() +
+  labs(title="Temperatura del agua en temporada",
+     y = "Frecuencia",
+     x = "Temperatura del agua (°C)")
+```
+
+### Boxplot
+```{r}
+ggplot(data = na.omit(Sargo), aes(x= Temprada, y = Water_Temp, fill=Temprada))+
+  geom_boxplot()+
+  theme_linedraw() +
+  labs(title="Temperatura del agua en temporada",
+     x = "Tratamiento",
+     y = "Temperatura del agua (°C)")
+```
+## Temperatura del agua vs huevos
+
+```{r}
+ggplot(data = na.omit(Sargo), aes(x=Water_Temp, y=No_of_eggs))+
+  geom_point(aes_string(colour="Temprada"))+
+  theme_linedraw() +
+  labs(title="Relación entre Número de huevos y temperatura",
+       x = "Número de huevos (1'000'000)",
+       y = "Temperatura del agua")
+```
+
+### Densidad acumulada
+
+```{r}
+ggplot(data = na.omit(Sargo), aes(x=Day_length, y=No_of_eggs))+
+  geom_point(aes_string(colour="Temprada"))+
+  theme_linedraw() +
+  labs(title="Relación entre Número de huevos y el fotoperiodo natural",
+       x = "Número de huevos (1'000'000)",
+       y = "Horas de luz")
+```
+
+##
 
 
