@@ -26,20 +26,98 @@ Sargo <- read_excel("Desove.xlsx", sheet = 1)
 ```
 
 
+# Variación de variables con histogramas
+
+## Desoves por temporada
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(Sargo, aes(x = No_of_eggs)) +
+  geom_histogram(aes(fill=..count..), bins = 12)+
+  scale_fill_gradient("Count", low = "red", high = "green")+
+  labs(title="Número de huevos por desove",
+     y = "Frecuencia",
+     x = "Número de huevos\n(x 1'000'000)")
+```
+
+## Temperatura del agua por temporada
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(Sargo, aes(x = Water_Temp)) +
+  geom_histogram(aes(fill=..count..), bins = 12)+
+  scale_fill_gradient("Count", low = "red", high = "green")+
+  labs(title="Temperatura del agua",
+     y = "Frecuencia",
+     x = "Temperatura (°C)")
+```
+
+
+## Fotoperiodo natural por temporada
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(Sargo, aes(x = Day_length)) +
+  geom_histogram(aes(fill=..count..), bins = 12)+
+  scale_fill_gradient("Count", low = "red", high = "green")+
+  labs(title="Fotoperiodo natural",
+     y = "Frecuencia",
+     x = "Horas de luz")
+```
+
+
+# Análisis exploratorio de datos
+
+```{r, warning=FALSE, message=FALSE}
+
+#Resúmen de datos
+summary(na.omit(Sargo))
+
+# Datos iniciales
+tablainicio <- head(na.omit(Sargo))
+tablainicio %>% knitr::kable(caption = "Datos iniciales de la tabla de datos")
+
+#Datos finales
+tablafinal <- tail(na.omit(Sargo))
+tablafinal %>% knitr::kable(caption = "Datos finales de la tabla de datos")
+
+#Estructura de los datos
+str(Sargo)
+
+# Tabla de Cantidad de desoves por temporada
+Tabla <- table(na.omit(Sargo$Temporada))
+Tabla %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
+```
+
+## Modificando variables
+
+```{r}
+Sargo$Year <- as.character(Sargo$Year)
+Sargo$month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo","Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
+str(na.omit(Sargo))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Gráficos exploratorios de datos
 
 ## Desoves por temporada
 
 ### Histograma
 
-```{r, warning=FALSE, message=FALSE}
-ggplot(Sargo, aes(x = No_of_eggs)) +
-  geom_histogram(aes(fill=..count..), bins = 12)+
-  scale_fill_gradient("Count", low = "red", high = "green")+
-  labs(title="Frecuencia de Número de huevos",
-     y = "Frecuencia",
-     x = "Número de huevos\n(x 1'000'000)")
-```
+
+
 
 ### Boxplot
 ```{r}
@@ -106,35 +184,4 @@ ggplot(data = na.omit(Sargo), aes(x=Day_length, y=No_of_eggs))+
        x = "Número de huevos (1'000'000)",
        y = "Horas de luz")
 ```
-
-
-# Análisis exploratorio de datos
-
-```{r, warning=FALSE, message=FALSE}
-
-summary(na.omit(Sargo))
-
-tablainicio <- head(na.omit(Sargo))
-tablainicio %>% knitr::kable(caption = "Datos iniciales de la tabla de datos")
-
-tablafinal <- tail(na.omit(Sargo))
-tablafinal %>% knitr::kable(caption = "Datos finales de la tabla de datos")
-
-# str(Sargo)
-
-Tabla <- table(na.omit(Sargo$Temporada))
-Tabla %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
-```
-
-## Modificando variables
-
-```{r}
-Sargo$Year <- as.character(Sargo$Year)
-Sargo$month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo","Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
-str(na.omit(Sargo))
-```
-
-
-
-
 
