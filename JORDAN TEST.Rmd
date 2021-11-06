@@ -1,6 +1,6 @@
 ---
-title: "Análisis_Datos_Jordan"
-author: "Jordan_Ismael"
+title: "Reporte de Análisis Exploratorio de Datos"
+author: "Jordan I. Huanacuni"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: pdf_document
 ---
