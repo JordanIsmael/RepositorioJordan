@@ -84,22 +84,44 @@ HV <- ggplot(Sargo, aes(x = Egg_viability)) +
 # _______________________________________
 
 
-# Análisis exploratorio de datos
+# Identificación de datos balanceados
 
+### Eventos de desove por temporada
+```{r, warning=FALSE, message=FALSE}
+# str(Sargo)
+
+Sargo$Temporada <- as.factor(Sargo$Temporada)
+Tabla1 <- table(na.omit(Sargo$Temporada))
+Tabla1 %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
+```
+###### COMENTARIO: La cantidad de desoves clasificados según temporada, no están balanceados
+
+### Días evaluados por Año
 ```{r, warning=FALSE, message=FALSE}
 
-#Resúmen de datos
-summary(na.omit(Sargo))
-
-#Estructura de los datos
-str(Sargo)
-
-# Tabla de Cantidad de desoves por temporada
-Tabla <- table(na.omit(Sargo$Temporada))
-Tabla %>% knitr::kable(col.names= c('Temporada', 'Número de desoves'), align = "cc", caption = "Cantidad de desoves por temporada")
+Sargo$Year <- as.factor(Sargo$Year)
+Tabla2 <- table(na.omit(Sargo$Year))
+Tabla2 %>% knitr::kable(col.names= c('Año', 'Días evaluados'), align = "cc",
+                        caption = "Cantidad de días con registro de temperatura y fotoperiodo")
 ```
+###### COMENTARIO: La cantidad de datos de temperatura y fotoperiodo natural registrados durante los años difieren en 1 observación, debido a los años bisciestos, no están balanceados.
 
-###### COMENTARIO: Los datos clasificados según temporada, no están balanceados.
+### Días evaluados por mes
+```{r, warning=FALSE, message=FALSE}
+
+Sargo$month <- as.factor(Sargo$month)
+order_month <- factor(Sargo$month, levels = c("Enero", "Febrero", "Marzo", "Abril",
+                                              "Mayo", "Junio", "Julio", "Agosto",
+                                              "Setiembre", "Octubre", "Noviembre", "Diciembre"))
+  
+Tabla3 <- table(na.omit(order_month))
+Tabla3 %>% knitr::kable(col.names= c('Mes', 'Días evaluados'), align = "cc",
+                        caption = "Cantidad de días por mes con registro de temperatura y fotoperiodo")
+
+str(Sargo)
+```
+###### COMENTARIO: La cantidad de datos de temperatura y fotoperiodo natural registrados durante los meses difieren en 1 observación, debido a los años bisciestos, no están balanceados.
+
 
 # _______________________________________
 
@@ -287,17 +309,48 @@ OLH + OLT + OLF + OLV
 
 ```
 
-### El número de huevos presenta datos atípicos en la temporada 1, 2, 3 y 4
+##### COMENTARIO
+###### El número de huevos presenta datos atípicos en las temporadas 1, 2, 3 y 4.
+###### La temperatura del agua presenta datos atípicos en las temporadas 1, 3 y 4.
+###### El fotoperiodo natural presenta 1 dato atípico en las temporadas 5.
+###### La viablidad de desoves presenta datos atípicos en las temporadas 1 y 2.
 
+# _______________________________________
 
 # Resumen de datos y estadística descriptiva usando Tablas
 
+## Resumen estadistico de huevos por temporada
 ```{r}
 # Estadística estadistica descriptiva del número de huevos en la temporada 1.
-tablaHuevos<- Sargo%>%
-  filter(Temporada=="1")%>%
-  summarize(mean(No_of_eggs),sd(No_of_eggs),max(No_of_eggs),min(No_of_eggs))
-knitr::kable(tablaHuevos,caption = "Estadisticos Descriptivos - Cantidad de huevos (x 1'000'000")
 
+#Resúmen de datos
+#   summary(na.omit(Sargo))
+
+#Estructura de los datos
+#   str(Sargo)
+
+tabla_Huevo <- Sargo%>%
+  group_by(Temporada)%>%
+  summarise(mean=mean(No_of_eggs),sd=sd(No_of_eggs), var=var(No_of_eggs),max=max(No_of_eggs),min=min(No_of_eggs), n=n())
+knitr::kable(tabla_Huevo,caption = "Resumen de cantidad de huevos (x 1'000'000) agrupado por temporada")
 ```
+
+## Resumen de Temperaturas por temporada
+```{r}
+
+tabla_Temperatura<- Sargo%>%
+  group_by(Temporada)%>%
+  summarise(mean=mean(Water_Temp),sd=sd(Water_Temp), var=var(Water_Temp), max=max(Water_Temp),min=min(Water_Temp), n=n())
+tabla_Temperatura %>% knitr::kable(caption = "Resumen de la temperatura del agua (°C) agrupado por temporadas")
+```
+
+## Resumen de Fotoperiodo natural por temporada
+```{r}
+
+tabla_Day<- Sargo%>%
+  group_by(Temporada)%>%
+  summarise(mean=mean(Day_length),sd=sd(Day_length), var=var(Day_length),max=max(Day_length),min=min(Day_length), n=n())
+knitr::kable(tabla_Day,caption = "Resumen de las horas de luz del fotoperiodo natural agrupado por meses")
+```
+
 
