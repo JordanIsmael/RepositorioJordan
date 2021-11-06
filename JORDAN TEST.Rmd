@@ -23,7 +23,7 @@ library(psych)
 library(patchwork)
 ```
 
-#Cargamos la base de datos
+# Cargamos la base de datos
 ```{r}
 #Cargamos la base de datos "Desoves.xlsx"
 Sargo <- read_excel("Desove.xlsx", sheet = 1)
@@ -118,7 +118,7 @@ Tabla3 <- table(na.omit(order_month))
 Tabla3 %>% knitr::kable(col.names= c('Mes', 'Días evaluados'), align = "cc",
                         caption = "Cantidad de días por mes con registro de temperatura y fotoperiodo")
 
-str(Sargo)
+# str(Sargo)
 ```
 ###### COMENTARIO: La cantidad de datos de temperatura y fotoperiodo natural registrados durante los meses difieren en 1 observación, debido a los años bisciestos, no están balanceados.
 
