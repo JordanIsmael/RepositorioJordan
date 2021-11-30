@@ -14,6 +14,10 @@ knitr::opts_chunk$set(echo = FALSE)
 #install.packages("knitr")
 #install.packages("psych")
 #install.packages("patchwork")
+#install.packages("multcomp")
+#install.packages("car")
+#install.packages("lmtest")
+
 
 library(readxl)
 library(dplyr)
@@ -21,6 +25,9 @@ library(ggplot2)
 library(knitr)
 library(psych)
 library(patchwork)
+library(multcomp)
+library(car)
+library(lmtest)
 ```
 
 # Cargamos la base de datos
@@ -352,5 +359,73 @@ tabla_Day<- Sargo%>%
   summarise(mean=mean(Day_length),sd=sd(Day_length), var=var(Day_length),max=max(Day_length),min=min(Day_length), n=n())
 knitr::kable(tabla_Day,caption = "Resumen de las horas de luz del fotoperiodo natural agrupado por meses")
 ```
+
+# -----------------------------------------------------
+# SEGUNDA PARTE DE LA PRUEBA
+# -----------------------------------------------------
+
+# Objetivo
+Determinar el modelo estadistico que se ajusta a la relacion de temperatura del agua y el fotoperiodo natural en los desoves de *Anisotremus scapularis*
+
+# Supuesto de Normalidad 
+
+```{r}
+lm.aov <- lm(Water_Temp ~ Day_length, data = Sargo)
+lm.aov
+```
+
+```{r}
+aov_residuals <- residuals(object = lm.aov)
+```
+
+```{r}
+plot(lm.aov, 1, pch=20, col = "blue")
+```
+
+```{r}
+plot(lm.aov, 2, pch=20, col = "blue")
+```
+
+```{r}
+aov_residuals <- residuals(object = lm.aov)
+hist(x= aov_residuals, main = "Histograma de residuales")
+```
+
+```{r}
+shapiro.test(x= aov_residuals)
+```
+# La prueba de Shapiro nos indica que no hay normalidad entre los datos (p-value = 0.04738)
+
+# _______________________________________
+
+# Comparacion de regresion lineal y no lineal
+
+## Moldelo 1. Regresion lineal simple
+
+```{r}
+modelo1 <- lm(Water_Temp ~ Day_length,data = Sargo)
+summary(modelo1)$coef %>% kable()
+```
+
+```{r}
+ggplot(data = Sargo, aes(x = Water_Temp, y = Day_length)) +
+  geom_point(position = position_jitter(w = 0, h = 0.1) )+
+  geom_smooth(method = "lm", formula = y ~ poly(x, 1), color = "blue")
+```
+
+## Descripcion:  Segun la figura los datos no interceptan con la pendiente, por lo tanto, no presentan un modelo lineal
+
+# Moldelo 2. Regresion No lineal
+
+```{r}
+ggplot(data = Sargo, aes(x = No_of_eggs, y = Day_length)) +
+  geom_point(position = position_jitter(w = 0, h = 0.1) )+
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "red")
+```
+## Los datos no se ajustan a un modelo no lineal
+
+# Conclusión
+Los datos de Temperatura y fotoperiodo natural, no se adecuan a un modelo lineal, es necesario la inclusion de mas variables para una adecuada evaluacion.
+
 
 
